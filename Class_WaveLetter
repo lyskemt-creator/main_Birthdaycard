@@ -1,0 +1,20 @@
+class WaveLetter extends Letter {
+  float phase;
+  float amp = 8;
+
+  WaveLetter(char ch, float x, float y, PFont font, color col) {
+    super(ch, x, y, font, col);
+    phase = random(TWO_PI);
+  }
+
+  void update() {
+    phase += 0.08;
+  }
+
+  void display() {
+    textFont(font);
+    fill(col);
+    textAlign(CENTER, CENTER);
+    text(ch, x, y + sin(phase) * amp);
+  }
+}
