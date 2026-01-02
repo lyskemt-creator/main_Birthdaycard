@@ -1,0 +1,20 @@
+class BounceLetter extends Letter {
+  float vy = random(1.5, 3);
+
+  BounceLetter(char ch, float x, float y, PFont font, color col) {
+    super(ch, x, y, font, col);
+  }
+
+  void update() {
+    y += vy;
+    if (y > height - 40 || y < 40) vy *= -1;
+  }
+
+  void display() {
+    bg.invertAt(x, y, 30);
+    textFont(font);
+    fill(col);
+    textAlign(CENTER, CENTER);
+    text(ch, x, y);
+  }
+}
