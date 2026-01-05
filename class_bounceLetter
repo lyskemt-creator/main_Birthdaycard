@@ -1,0 +1,19 @@
+class BounceLetter extends Letter {                       // Subclass 2: small horizontal wiggle
+  float phase;
+  float amp;
+
+  BounceLetter(char ch, float relX, float relY, PFont font, float fontSize, PImage bgImg, float amp) {
+    super(ch, relX, relY, font, fontSize, bgImg);
+    this.amp = amp;
+    phase = random(TWO_PI);
+  }
+
+  void update() {
+    phase += 0.08;
+  }
+
+  void display() {
+    float xx = x + cos(phase) * amp;
+    drawInvertedFillPerPixel(xx, y);
+  }
+}
