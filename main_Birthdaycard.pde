@@ -1,6 +1,7 @@
 // Circus Bithday Card
 // Lyske Tromp (3537048)
-// Date: 27 Nov 2025
+// Richella de Vries
+// Date: 5 Jan 2026
 
 // Click the play button to start the animation and music.
 
@@ -135,7 +136,8 @@ void createObjects() {                           // Creates all objects after as
     ticket, // Ticket reference so text can follow the ticket
     TEXT_OFFSET_X, // Text offset X relative to ticket
     TEXT_OFFSET_Y, // Text offset Y relative to ticket
-    font                                         // Font to use for drawing text
+    font,                                         // Font to use for drawing text
+    bgImg
     );
 }
 
