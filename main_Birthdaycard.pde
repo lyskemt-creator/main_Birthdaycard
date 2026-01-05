@@ -47,12 +47,11 @@ boolean playing = false;                        // State: false = waiting for cl
 
 void settings() {                               // settings() runs before setup(), used to configure the window
   size(CANVAS_SIZE, CANVAS_SIZE, P2D);          // Create the sketch window with a fixed size and the P2D renderer
+  smooth(4);                                    // Enable anti-aliasing to make shapes and edges smoother
+  pixelDensity(displayDensity());               // Match the sketch resolution to the screen's pixel density
 }                                               // End of settings()
 
 void setup() {                                  // setup() runs once after the window has been created
-  smooth(4);                                    // Enable anti-aliasing to make shapes and edges smoother
-  pixelDensity(displayDensity());               // Match the sketch resolution to the screen's pixel density
-
   loadAssets();                                 // Load images, fonts, and sound files from the data folder
   createObjects();                              // Create all objects (clowns, button, ticket, text, etc.)
 }                                               // End of setup()
