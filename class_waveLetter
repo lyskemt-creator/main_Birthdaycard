@@ -1,0 +1,19 @@
+class WaveLetter extends Letter {                         // Subclass 1: vertical wave motion
+  float phase;
+  float amp;
+
+  WaveLetter(char ch, float relX, float relY, PFont font, float fontSize, PImage bgImg, float amp) {
+    super(ch, relX, relY, font, fontSize, bgImg);
+    this.amp = amp;
+    phase = random(TWO_PI);
+  }
+
+  void update() {
+    phase += 0.12;
+  }
+
+  void display() {
+    float yy = y + sin(phase) * amp;
+    drawInvertedFillPerPixel(x, yy);
+  }
+}
