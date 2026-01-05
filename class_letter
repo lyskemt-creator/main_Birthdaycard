@@ -1,0 +1,106 @@
+class Letter {                                            // Base class for all letters
+  char ch;                                                // Character to draw
+  float relX, relY;                                       // Position relative to the text anchor
+  float x, y;                                             // Final screen position (anchor + rel)
+  float anchorX, anchorY;                                 // Anchor position (ticket position)
+
+  PFont font;                                             // Font used for drawing
+  float fontSize;                                         // Font size (needed for mask building)
+
+  PImage bgImg;                                           // Background image for pixel sampling
+
+  PImage maskImg;                                         // Cached mask image for this character
+  int maskW, maskH;                                       // Mask image size
+
+  Letter(char ch, float relX, float relY, PFont font, float fontSize, PImage bgImg) {
+    this.ch = ch;
+    this.relX = relX;
+    this.relY = relY;
+    this.font = font;
+    this.fontSize = fontSize;
+    this.bgImg = bgImg;
+
+    buildMask();                                          // Build the pixel mask once
+  }
+
+  void setAnchor(float ax, float ay) {                    // Called every frame so text follows the ticket
+    anchorX = ax;
+    anchorY = ay;
+    x = anchorX + relX;
+    y = anchorY + relY;
+  }
+
+  void update() {                                         // Default: no animation
+  }
+
+  void display() {                                        // Default display
+    drawInvertedFillPerPixel(x, y);                       // Only inverted fill, no outline
+  }
+
+  void buildMask() {                                      // Create a pixel mask for this character
+    textFont(font);
+    textSize(fontSize);
+    textAlign(LEFT, BASELINE);
+
+    float glyphW = textWidth(str(ch));                    // Character width
+    float glyphH = textAscent() + textDescent();          // Character height
+
+    maskW = int(glyphW) + 8;                              // Padding
+    maskH = int(glyphH) + 8;
+
+    PGraphics pg = createGraphics(maskW, maskH);
+    pg.beginDraw();
+    pg.clear();
+    pg.textFont(font);
+    pg.textSize(fontSize);
+    pg.textAlign(LEFT, BASELINE);
+    pg.fill(255);                                         // White glyph = active pixels
+    pg.text(ch, 4, 4 + textAscent());
+    pg.endDraw();
+
+    maskImg = pg.get();
+    maskImg.loadPixels();
+  }
+
+  void drawInvertedFillPerPixel(float cx, float cy) {     // Per-pixel inverted drawing
+    if (maskImg == null || bgImg == null) return;
+
+    int left = int(cx - maskW / 2);
+    int top  = int(cy - maskH / 2);
+
+    for (int my = 0; my < maskH; my++) {
+      for (int mx = 0; mx < maskW; mx++) {
+
+        int idx = mx + my * maskW;
+        int a = (maskImg.pixels[idx] >> 24) & 0xFF;
+
+        if (a == 0) continue;
+
+        int sx = left + mx;
+        int sy = top + my;
+
+        color inv = getInvertedBackgroundColor(sx, sy);
+
+        stroke(red(inv), green(inv), blue(inv), a);
+        point(sx, sy);
+      }
+    }
+  }
+
+  color getInvertedBackgroundColor(int screenX, int screenY) { // Invert background pixel behind this screen pixel
+    // This assumes your background image is drawn covering the whole canvas (scaled to width/height)
+    int px = int(map(screenX, 0, width, 0, bgImg.width));
+    int py = int(map(screenY, 0, height, 0, bgImg.height));
+
+    px = constrain(px, 0, bgImg.width - 1);
+    py = constrain(py, 0, bgImg.height - 1);
+
+    color bg = bgImg.get(px, py);
+
+    return color(
+      255 - red(bg),
+      255 - green(bg),
+      255 - blue(bg)
+    );
+  }
+}
