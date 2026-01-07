@@ -1,19 +1,19 @@
 class BounceLetter extends Letter {                       // Subclass 2: small horizontal wiggle
-  float phase;
-  float amp;
+  float phase; // Keeps track of the wiggle movement
+  float amp; // How far the letter moves side to side
 
   BounceLetter(char ch, float relX, float relY, PFont font, float fontSize, PImage bgImg, float amp) {
     super(ch, relX, relY, font, fontSize, bgImg);
     this.amp = amp;
-    phase = random(TWO_PI);
+    phase = random(TWO_PI); // Start each letter at a different point in the movement
   }
 
   void update() {
-    phase += 0.08;
+    phase += 0.08; // Move the wiggle forward a little each frame
   }
 
   void display() {
-    float xx = x + cos(phase) * amp;
-    drawInvertedFillPerPixel(xx, y);
+    float xx = x + cos(phase) * amp; // Change the x position to make the letter move left and right
+    drawInvertedFillPerPixel(xx, y); // Draw the letter at the new position
   }
 }
