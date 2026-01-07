@@ -1,19 +1,19 @@
 class WaveLetter extends Letter {                         // Subclass 1: vertical wave motion
-  float phase;
-  float amp;
+  float phase; // Phase offset used for the wavy animation
+  float amp; // Amplitude of the wave (how far the letter moves up and down)
 
   WaveLetter(char ch, float relX, float relY, PFont font, float fontSize, PImage bgImg, float amp) {
     super(ch, relX, relY, font, fontSize, bgImg);
-    this.amp = amp;
-    phase = random(TWO_PI);
+    this.amp = amp;  // Store the wave amplitude
+    phase = random(TWO_PI); // Start the wave at a random phase so letters don't move in sync
   }
 
   void update() {
-    phase += 0.12;
+    phase += 0.12; // Move the wave forward a little each frame
   }
 
   void display() {
-    float yy = y + sin(phase) * amp;
-    drawInvertedFillPerPixel(x, yy);
+    float yy = y + sin(phase) * amp; // Change the y position to make the letter move up and down
+    drawInvertedFillPerPixel(x, yy); // Draw the letter at the new position
   }
 }
